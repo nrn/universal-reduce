@@ -1,0 +1,31 @@
+{
+  "name": "universal-reduce",
+  "version": "1.0.0",
+  "description": "Reduce over anything.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nrn/universal-reduce"
+  },
+  "keywords": [
+    "iterate",
+    "reduce",
+    "reduced",
+    "universal"
+  ],
+  "author": "Nick Niemeir <nick.niemeir@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nrn/kv-array/issues"
+  },
+  "homepage": "https://github.com/nrn/kv-array",
+  "devDependencies": {
+    "tape": "^4.0.3"
+  },
+  "dependencies": {
+    "tape": "^4.2.0"
+  }
+}
