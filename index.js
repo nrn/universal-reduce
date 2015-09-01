@@ -8,7 +8,7 @@ module.exports = reduce
 
 function reduce (stuff, fn, acc) {
   if (!stuff) return acc
-  if (canBeMap && stuff instanceof Map) {
+  if (hasSymbol && canBeMap && stuff instanceof Map) {
     return reduceMap(stuff, fn, acc)
   }
   if (hasSymbol && Symbol.iterator && stuff[Symbol.iterator]) {
