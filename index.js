@@ -1,5 +1,5 @@
 var has = Object.prototype.hasOwnProperty
-var canBeMap = typeof Map === 'function'
+var toString = Object.prototype.toString
 var hasSymbol = typeof Symbol === 'function'
 
 reduce.reduced = Reduced
@@ -8,7 +8,7 @@ module.exports = reduce
 
 function reduce (stuff, fn, acc) {
   if (!stuff) return acc
-  if (hasSymbol && canBeMap && stuff instanceof Map) {
+  if (hasSymbol && toString.call(stuff) === '[object Map]') {
     return reduceMap(stuff, fn, acc)
   }
   if (hasSymbol && Symbol.iterator && stuff[Symbol.iterator]) {
