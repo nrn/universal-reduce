@@ -13,14 +13,11 @@ var universalReduce = require('universal-reduce')
 
 ### universalReduce(anything, fn[, initial])
 
-Works the same as Array.prototype.reduce, except that it can be used
-on anything.
+Similar to Array.prototype.reduce, except that it can be used on anything.
 
 `fn(accumulator, value, key) -> accumulator`. fn is called for each item in
 anything, receiving the previous result of calling fn, the value of the item,
-and a reasonable key value. The first call is seeded with initial if provided,
-otherwise we skip the first call, and seed the second call with the 'value'
-that would have been passed to the first call.
+and a reasonable key value. The first call is seeded with initial if provided.
 
 For non-Map iterables 'key' is the string representation of the integer index
 based on the order it has been iterated to. This gives the most consistent

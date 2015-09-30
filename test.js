@@ -12,7 +12,7 @@ test('reduce', function (t) {
   // generators get exausted between the tests
   t.same(reduce(foo(), function (acc, val) {
     return acc + val
-  }), 6, 'sum generator')
+  }, 0), 6, 'sum generator')
 
   t.same(reduce(foo(), function (acc, val, key) {
     if (key === '2') return reduce.reduced(acc)
@@ -28,7 +28,7 @@ test('reduce', function (t) {
   function sum (stuff) {
     t.same(reduce(stuff, function (acc, val) {
       return acc + val
-    }), 6, 'sum ' + stuff.constructor.name)
+    }, 0), 6, 'sum ' + stuff.constructor.name)
 
     t.same(reduce(stuff, function (acc, val, key) {
       if (key === '2') return reduce.reduced(acc)

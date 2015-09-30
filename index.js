@@ -8,7 +8,7 @@ module.exports = reduce
 
 function reduce (stuff, fn, acc) {
   if (!stuff) return acc
-  if (hasSymbol && toString.call(stuff) === '[object Map]') {
+  if (toString.call(stuff) === '[object Map]') {
     return reduceMap(stuff, fn, acc)
   }
   if (hasSymbol && Symbol.iterator && stuff[Symbol.iterator]) {
@@ -18,17 +18,9 @@ function reduce (stuff, fn, acc) {
 }
 
 function reduceObj (obj, fn, acc) {
-  var first = true
   var next = acc
   for (var i in obj) {
     if (has.call(obj, i)) {
-     if (first) {
-       first = false
-       if (typeof next === 'undefined') {
-         next = obj[i]
-         continue
-       }
-     }
      next = fn(next, obj[i], i)
      if (next instanceof Reduced) return next.val
     }
@@ -40,18 +32,9 @@ function reduceIt (it, fn, acc) {
   var inserted = 0
   var step = null
   var next = acc
-  var first = true
   while (true) {
     step = it.next()
     if (step.done) break;
-    if (first) {
-      first = false
-      if (typeof next === 'undefined') {
-        inserted++
-        next = step.value
-        continue
-      }
-    }
     next = fn(next, step.value, '' + inserted++)
     if (next instanceof Reduced) return next.val
   }
@@ -61,18 +44,10 @@ function reduceIt (it, fn, acc) {
 function reduceMap (map, fn, acc) {
   var step = null
   var next = acc
-  var first = true
-  var it = map[Symbol.iterator]()
+  var it = map.entries()
   while (true) {
     step = it.next()
     if (step.done) break;
-    if (first) {
-      first = false
-      if (typeof next === 'undefined') {
-        next = step.value[1]
-        continue
-      }
-    }
     next = fn(next, step.value[1], step.value[0])
     if (next instanceof Reduced) return next.val
   }
