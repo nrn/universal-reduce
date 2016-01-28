@@ -8,6 +8,8 @@ test('reduce', function (t) {
   sum(new Map([['0', 1], ['1', 2], ['2', 3]]))
   sum(new Set([1, 2, 3]))
   sum({'0': 1, '1': 2, '2': 3})
+  var complex = new ComplexObject()
+  sum(complex)
 
   // generators get exausted between the tests
   t.same(reduce(foo(), function (acc, val) {
@@ -44,3 +46,20 @@ function* foo () {
     yield count
   }
 }
+
+function ComplexObject () {
+  this[0] = 3
+  this[2] = 0
+  this[Symbol('foo')] = 3
+  Object.defineProperty(this, Symbol('baz'), {
+    value: 1000,
+    enumerable: false
+  })
+  Object.defineProperty(this, 'baz', {
+    value: 1000,
+    enumerable: false
+  })
+}
+ComplexObject.prototype[Symbol('bar')] = 100
+ComplexObject.prototype.bar = 100
+

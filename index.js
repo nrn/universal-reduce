@@ -1,8 +1,11 @@
 var has = Object.prototype.hasOwnProperty
 var toString = Object.prototype.toString
+var enumerable = Object.prototype.propertyIsEnumerable
 var hasSymbol = typeof Symbol === 'function'
 
 reduce.reduced = Reduced
+reduce.isReduced = isReduced
+reduce.unwrap = unwrap
 
 module.exports = reduce
 
@@ -21,8 +24,19 @@ function reduceObj (obj, fn, acc) {
   var next = acc
   for (var i in obj) {
     if (has.call(obj, i)) {
-     next = fn(next, obj[i], i)
-     if (next instanceof Reduced) return next.val
+      next = fn(next, obj[i], i)
+      if (isReduced(next)) return next['@@transducer/value']
+    }
+  }
+  if (typeof Object.getOwnPropertySymbols === 'function') {
+    var symbols = Object.getOwnPropertySymbols(obj)
+    var key
+    for (var j = 0; j < symbols.length; j++) {
+      key = symbols[j]
+      if (enumerable.call(obj, key)) {
+        next = fn(next, obj[key], key)
+        if (isReduced(next)) return next['@@transducer/value']
+      }
     }
   }
   return next
@@ -36,7 +50,7 @@ function reduceIt (it, fn, acc) {
     step = it.next()
     if (step.done) break;
     next = fn(next, step.value, '' + inserted++)
-    if (next instanceof Reduced) return next.val
+    if (isReduced(next)) return next['@@transducer/value']
   }
   return next
 }
@@ -49,12 +63,26 @@ function reduceMap (map, fn, acc) {
     step = it.next()
     if (step.done) break;
     next = fn(next, step.value[1], step.value[0])
-    if (next instanceof Reduced) return next.val
+    if (isReduced(next)) return next['@@transducer/value']
   }
   return next
 }
 
 function Reduced (val) {
-  if (!(this instanceof Reduced)) return new Reduced(val)
-  this.val = val
+  return {
+    '@@transducer/reduced': true,
+    '@@transducer/value': val
+  }
+}
+
+function unwrap (val) {
+  while (isReduced(val)) {
+    val = val['@@transducer/value']
+  }
+  return val
+}
+
+function isReduced (val) {
+  if (val == null) return false
+  return val['@@transducer/reduced'] === true
 }
