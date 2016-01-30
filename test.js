@@ -20,7 +20,10 @@ test('reduce', function (t) {
     if (key === '2') return reduce.reduced(acc)
     return acc + val
   }, 0), 3, 'early reduced generator')
-  
+
+  t.ok(reduce.isReduced(reduce._reduce([ 1, 2], reduce.reduced, 4)), "doesn't unwrap")
+  t.equal(reduce._reduce([ 1, 2], reduce.reduced, 4)['@@transducer/value'], 4, 'manual unwraped')
+
   ;(function () {
     sum(arguments)
   }(1,2,3))
